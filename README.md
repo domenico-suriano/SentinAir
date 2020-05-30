@@ -1,2 +1,1 @@
-# sentinAir
-flexible tool for data acquisition from heterogeneous devices
+![Image of Yaktocat](https://github.com/domenico-suriano/SentinAir/blob/guide/sentinairlogo.jpg)
