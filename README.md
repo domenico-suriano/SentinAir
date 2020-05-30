@@ -1,4 +1,4 @@
-![logo](https://github.com/domenico-suriano/SentinAir/blob/guide/sentinairlogo.jpg)
+![logo](https://github.com/domenico-suriano/SentinAir/blob/master/images/sentinairdevice.jpg)
 
 Project designer and developer
 
