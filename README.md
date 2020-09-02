@@ -11,3 +11,4 @@ SentinAir is a device designed and developed for data acquisition from any type 
 I hope it will be useful to you
 
 ![sentinair](https://github.com/domenico-suriano/SentinAir/blob/master/images/sentinairdevice.jpg)
+[![how to use SentinAir]](https://img.youtube.com/vi/VIDEO-ID/0.jpg)](https://github.com/domenico-suriano/SentinAir/blob/master/video/sentinair_for_github.mp4)
