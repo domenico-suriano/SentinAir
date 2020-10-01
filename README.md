@@ -13,7 +13,7 @@ I hope it will be useful to you.
 This is a quick procedure to install the SentinAir software making the minimum steps. If you desire a higher level of customization, you can refer to the “SentinAir software installation” chapter of the [user guide](https://github.com/domenico-suriano/SentinAir/blob/master/guide/sentinair-system-user-guide.pdf) released in this repository. To install SentinAir, download the [last SentinAir SD card image file](https://drive.google.com/file/d/1shvQu5CbSOjgNIMClUYERdzeBZ0JsoTz/view?usp=sharing) (file size of 560 Mb). Then, write it in a SD card having at least 2 GB of memory space by using, for example, Win32diskimage.exe program (for Windows operative systems).
 
 # Using SentinAir
-To use the SentinAir system, please, refer to the [user guide](https://github.com/domenico-suriano/SentinAir/blob/master/guide/sentinair-system-user-guide.pdf) released in this repository.
+To use the SentinAir system, please, refer to the [user guide](https://github.com/domenico-suriano/SentinAir/blob/master/guide/sentinair-system-user-guide.pdf) released in this repository. An overview of the SentinAir system use is shown in the video you can see by clicking on the pictures below.
 
 # Last Updates
 30 september 2020: user guide updated, and also some minor bugs fixed. Please, download, the release 1.0 and update the system with the files you can find in the [sentinair_1.0.zip](https://github.com/domenico-suriano/SentinAir/releases/download/v1.0/sentinair_1.0.zip)  
