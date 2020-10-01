@@ -16,7 +16,7 @@ This is a quick procedure to install the SentinAir software making the minimum s
 To use the SentinAir system, please, refer to the [user guide](https://github.com/domenico-suriano/SentinAir/blob/master/guide/sentinair-system-user-guide.pdf) released in this repository.
 
 # Last Updates
-30 september 2020: user guide updated, and also some minor bug fixed. Please, download, the release 1.0 and update the system with the files you can find in the [sentinair_1.0.zip](https://github.com/domenico-suriano/SentinAir/releases/download/v1.0/sentinair_1.0.zip)  
+30 september 2020: user guide updated, and also some minor bugs fixed. Please, download, the release 1.0 and update the system with the files you can find in the [sentinair_1.0.zip](https://github.com/domenico-suriano/SentinAir/releases/download/v1.0/sentinair_1.0.zip)  
 
 [![sentinair](https://github.com/domenico-suriano/SentinAir/blob/master/images/sentinairdevice.jpg)](https://youtu.be/oAHfk2gzcIE)
 [![how to use SentinAir](https://github.com/domenico-suriano/SentinAir/blob/master/video/video-still-1.jpg)](https://youtu.be/oAHfk2gzcIE)
