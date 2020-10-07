@@ -1,0 +1,13 @@
+#This is a config file where there is the mail account necessary to use the imap-smtp module.
+#To enable the control of SentinAir through mail sending and receiving, please, 
+#insert the e-mail account avoiding "space" charcters as in the following example:
+#MAIL_ADDRESS="myemail@mycompany.com"
+#MAIL_PWD="mypassword" 
+#SMTP_SERVER="my-smtpserver-url" 
+#IMAP_SERVER="my-imapserver-url" 
+
+
+MAIL_ADDRESS=""
+MAIL_PWD="" 
+SMTP_SERVER="" 
+IMAP_SERVER="" 
