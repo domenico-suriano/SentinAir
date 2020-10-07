@@ -17,9 +17,7 @@ To use the SentinAir system, please, refer to the [user guide](https://github.co
 
 # Last Updates
 30 september 2020:
-
 a) user guide updated,
-
 b) some minor bugs fixed. Please, download, the release 1.0 and update the system with the files you can find in the [sentinair_1.0.zip](https://github.com/domenico-suriano/SentinAir/releases/download/v1.0/sentinair_1.0.zip)
 
 7 october 2020:
