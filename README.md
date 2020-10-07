@@ -27,7 +27,7 @@ To use the SentinAir system, please, refer to the [user guide](https://github.co
 
 -d) User guide updated,
 
--e) release updated,
+-e) release [sentinair_1.0.zip](https://github.com/domenico-suriano/SentinAir/releases/download/v1.0/sentinair_1.0.zip) updated,
 
 -f) [SentinAir SD card image file](https://drive.google.com/file/d/1AfPUjvr3tC3ymnK-TsBThjoi5kFb1ZuD/view?usp=sharing) updated.
 
