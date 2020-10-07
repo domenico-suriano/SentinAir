@@ -97,6 +97,7 @@ DATA_DIR = "/var/www/html/data"
 IMG_DIR = "/var/www/html/img"
 LOG_FILENAME = '/var/www/html/log/sentinair-log.txt'
 IMAP_SMTP_FILE = "/home/pi/sentinair/imap-smtp-interface.py"
+MAIL_CONFIG_FILE = "/home/pi/sentinair/mail-config.sentinair"
 
 #connection types of devices
 USB_CONNECTION_TYPE = "usb"
@@ -128,6 +129,7 @@ AVG_INIT_ERR_LOG_MSG = 'Error in calculating means on init:'
 AVG_HOUR_ERR_LOG_MSG = 'Error in calculating hourly means:'
 AVG_DAY_ERR_LOG_MSG = 'Error in calculating daily means:'
 DATA_PORT_OPEN_ERR_LOG_MSG = "Udp data port opening failed"
+MAIL_CONFIG_NULL_LOG_MSG = "E-mail account is not present: the imap-smtp interface will not start"
 
 INIT_MSG = "\n\n" + INIT_LOG_MSG + "\n"
 UDP_CLI_PORT_ERR_MSG = "\n" + UDP_CLI_PORT_ERR_LOG_MSG + "\n"
@@ -141,6 +143,7 @@ MEAS_STOP_ERR_MSG = "Measurement session stopped with error"
 SYS_READY = "\n" + SYS_READY_LOG_MSG + "\n"
 INV_CMD = "Command not valid!\n"
 DATA_PORT_OPEN_ERR_MSG = DATA_PORT_OPEN_ERR_LOG_MSG + "\n"
+MAIL_CONFIG_NULL = "\nE-mail account is not present: the imap-smtp interface will not start\n"
 
 
 ERRS_STR = "Impossible to execute the command:\n" +\
@@ -904,10 +907,21 @@ def my_callback(channel):
         GPIO.output(26,GPIO.LOW)
         time.sleep(0.5)
         GPIO.output(26,GPIO.HIGH)
-        logging.warning(SHUTDOWN_BUTTON_PRESSED ,exc_info=True)
+        logging.warning(SHUTDOWN_BUTTON_PRESSED)
         os.popen("sudo shutdown -h now")
     except Exception as e:
         print ("Shutdown system failed!")
+
+## function to make blink the red check light
+def red_blinking():
+    global blink
+    while blink:
+        GPIO.output(26,GPIO.HIGH)
+        time.sleep(0.2)
+        GPIO.output(26,GPIO.LOW)
+        time.sleep(0.2)
+    GPIO.output(26,GPIO.HIGH)
+
 
 ## function to get started udp socket communications with user interfaces
 def init_consolle():
@@ -957,13 +971,53 @@ def send_data(sk,data):
         logging.warning(DATA_SENDING_ERR_LOG_MSG,exc_info=True)
 
 
+## function to check if a mail account exists
+def mail_account_check(maf):
+    mail = 0
+    pwd = 0
+    smtp = 0
+    imap = 0
+    try:
+        f = open(maf,"r")
+        lines = f.readlines()
+        for ll in lines:
+            if ll.find("MAIL_ADDRESS")==0:
+                ma = ll.split('"')
+                if ma[1].find("@") > 0:
+                    mail = 1
+            if ll.find("MAIL_PWD")==0:
+                pw = ll.split('"')
+                if pw[1]!= "":
+                    pwd = 1
+            if ll.find("SMTP_SERVER")==0:
+                sm = ll.split('"')
+                if sm[1]!= "":
+                    smtp = 1            
+            if ll.find("IMAP_SERVER")==0:
+                im = ll.split('"')
+                if im[1]!= "":
+                    imap = 1
+        if (mail == 1) and (pwd == 1) and (smtp == 1) and (imap == 1):
+            return 0
+        else:
+            logging.warning(MAIL_CONFIG_NULL_LOG_MSG)
+            print(MAIL_CONFIG_NULL)
+            return 1
+    except Exception as e:
+        logging.warning(MAIL_CONFIG_NULL_LOG_MSG,exc_info=True)
+        print(MAIL_CONFIG_NULL)
+        return 1
+    
+
 
 #### MAIN #######
 global rate
+global blink
 datacols = []
 datacolsh = []
 datacolsd = []
 rate = 0
+blink = True
 srv = None
 measure = NO_MEAS
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG,format='%(asctime)s - %(message)s',datefmt='%d/%m/%Y_%H:%M:%S')
@@ -989,9 +1043,10 @@ if sock == None:
     logging.warning("Init command line interface failed!")
 
 #### device connected scanning
-#### device connected scanning
+_thread.start_new_thread(red_blinking,())
 number_devices = 0
 connected_devices,number_devices = device_scanning(connected_devices,installed_devices,sock,srv,0)
+blink = False
 # calculating the MINIMUM_SAMPLING_RATE. It depends on the number of devices connected
 if number_devices < 12:
     MINIMUM_SAMPLING_RATE = 30
@@ -1025,11 +1080,12 @@ else:
     logging.info(strlog1)
     _thread.start_new_thread(capture,(skdata,connected_devices))
 
-#### starting imap-smtp interface
-try:
-    os.system("sudo python3 " + IMAP_SMTP_FILE + "&")
-except Exception as e:
-    logging.warning("Imap-smtp interface starting failed:",exc_info=True)
+if mail_account_check(MAIL_CONFIG_FILE) == 0:
+    #### starting imap-smtp interface
+    try:
+        os.system("sudo python3 " + IMAP_SMTP_FILE + "&")
+    except Exception as e:
+        logging.warning("Imap-smtp interface starting failed:",exc_info=True)
 
 
 #### starting operations finished 
