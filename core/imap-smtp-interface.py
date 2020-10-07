@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import smtplib
 import time
 import imaplib
@@ -28,14 +29,11 @@ import signal
 import logging
 import _thread
 
-## imap/smtp connection settings and e-mail account
-FROM_EMAIL  = "" 
-FROM_PWD    = "" 
-SMTP_SERVER = "" 
-IMAP_SERVER = ""
-
 ## path of the file in charge of monitoring the activity of this module
 MONITOR_FILE = "/home/pi/sentinair/imap-smtp-monitor.sh"
+
+## path of the file where are stored the e-mail account credentials
+MAIL_CONFIG_FILE = "/home/pi/sentinair/mail-config.sentinair"
 
 ## settings of the idp socket for the communications with sentinair system manager module
 UDP_SERVICE_PORT = 16670
@@ -64,7 +62,7 @@ def read_email_from_mail(cmd,sycs,sucs):
         mail = imaplib.IMAP4_SSL(IMAP_SERVER)
         mail.login(FROM_EMAIL,FROM_PWD)
         mail.select('inbox')
-        result, data = mail.search(None,'(FROM "domenico.suriano@enea.it" SUBJECT ' + "\"" + cmd + "\"" + ')')
+        result, data = mail.search(None,'(FROM "' + FROM_EMAIL + '" SUBJECT ' + "\"" + cmd + "\"" + ')')
         mail_ids1 = data[0]
         mail_ids = mail_ids1.decode()
     except Exception as e:
@@ -212,12 +210,50 @@ def run_system_command_2(cmd):
     return resp, filen
 
 
+## function to check if a mail account exists, and it fetches the credentials
+def mail_account_check(maf):
+    addr = ""
+    pwd = ""
+    smtp = ""
+    imap = ""
+    try:
+        f = open(maf,"r")
+        lines = f.readlines()
+        for ll in lines:
+            if ll.find("MAIL_ADDRESS")==0:
+                ma = ll.split('"')
+                if ma[1].find("@") > 0:
+                    addr = addr + ma[1]
+            if ll.find("MAIL_PWD")==0:
+                pw = ll.split('"')
+                if pw[1]!= "":
+                    pwd = pwd + pw[1]
+            if ll.find("SMTP_SERVER")==0:
+                sm = ll.split('"')
+                if sm[1]!= "":
+                     smtp = smtp + sm[1]          
+            if ll.find("IMAP_SERVER")==0:
+                im = ll.split('"')
+                if im[1]!= "":
+                    imap = imap + im[1]
+        if (addr != "") and (pwd != "") and (smtp != "") and (imap != ""):
+            return addr,pwd,smtp,imap
+        else:
+            logging.warning("E-mail account file not found")
+            print("E-mail account file not found\n")
+            return addr,pwd,smtp,imap
+    except Exception as e:
+        logging.warning("E-mail account file not found",exc_info=True)
+        print("E-mail account file not found\n")
+        return addr,pwd,smtp,imap
+
 #######################            
 ######### MAIN ########
 #######################
 global control
 global pid
 ### check if this module is configured, otherwise it exits
+FROM_EMAIL,FROM_PWD,SMTP_SERVER,IMAP_SERVER = mail_account_check(MAIL_CONFIG_FILE)
 if (FROM_EMAIL=="") or (FROM_PWD=="") or (SMTP_SERVER =="") or (IMAP_SERVER==""):
     sys.exit(0)
 time.sleep(5)
