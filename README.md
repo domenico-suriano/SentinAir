@@ -27,7 +27,7 @@ After following the "quick installation" procedure, plug into one of the system 
 
 -d) User guide updated,
 
--e) release [sentinair_1.0.zip](https://github.com/domenico-suriano/SentinAir/releases/download/v1.0/sentinair_1.0.zip) updated,
+-e) release [sentinair_1.0.zip](https://github.com/domenico-suriano/SentinAir/releases/download/1.0/sentinair-1.0.zip) updated,
 
 -f) [SentinAir SD card image file](https://drive.google.com/file/d/1AfPUjvr3tC3ymnK-TsBThjoi5kFb1ZuD/view?usp=sharing) updated.
 
@@ -35,7 +35,7 @@ After following the "quick installation" procedure, plug into one of the system 
 
 -a) user guide updated,
 
--b) some minor bugs fixed. Please, download, the release 1.0 and update the system with the files you can find in the [sentinair_1.0.zip](https://github.com/domenico-suriano/SentinAir/releases/download/v1.0/sentinair_1.0.zip)
+-b) some minor bugs fixed. Please, download, the release 1.0 and update the system with the files you can find in the [sentinair_1.0.zip]https://github.com/domenico-suriano/SentinAir/releases/download/1.0/sentinair-1.0.zip)
 
 [![sentinair](https://github.com/domenico-suriano/SentinAir/blob/master/images/sentinairdevice.jpg)](https://youtu.be/oAHfk2gzcIE)
 [![how to use SentinAir](https://github.com/domenico-suriano/SentinAir/blob/master/video/video-still-1.jpg)](https://youtu.be/oAHfk2gzcIE)
