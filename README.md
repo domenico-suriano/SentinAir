@@ -27,7 +27,9 @@ After following the "quick installation" procedure, plug into one of the system 
 
 -d) added device driver templates to facilitate the process of writing new device drivers (see the user guide).
 
--e) published the release of the version 1.2 
+-e) published the release of the version 1.2
+
+-f) [SentinAir SD card image file](https://drive.google.com/file/d/1Ex4GyDE1UydjNPgzCsWaSeaUH6ddkkUb/view?usp=sharing) updated.
 
 7 october 2020:
 
