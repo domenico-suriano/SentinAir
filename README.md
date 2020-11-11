@@ -23,7 +23,7 @@ After following the "quick installation" procedure, plug into one of the system 
 
 -b) added drivers for bh1750 (luxmeter) and mcp342x (ADC Pi converter)
 
--c) updated the user guide. More clarifications and examples concerning "How to write new device drivers". Information about the use of the ADC Pi.
+-c) updated the user guide. More clarifications and examples concerning "How to write new device drivers". Added information about the use of the ADC Pi.
 
 -d) added device driver templates to facilitate the process of writing new device drivers (see the user guide).
 
