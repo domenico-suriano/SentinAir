@@ -13,6 +13,16 @@
 # limitations under the License.
 
 installed_devices = []
+#mcp342x has been installed in SentinAir on 2020-11-02_11-55-33
+# do not remove or modify the next three lines below!!!
+from devices.mcp342x import Mcp342x
+mcp342x_obj = Mcp342x()
+installed_devices.append(mcp342x_obj)
+#bh1750 has been installed in SentinAir on 2020-11-02_11-55-19
+# do not remove or modify the next three lines below!!!
+from devices.bh1750 import Bh1750
+bh1750_obj = Bh1750()
+installed_devices.append(bh1750_obj)
 #v72m has been installed in SentinAir on 2020-07-31_04-48-53
 # do not remove or modify the next three lines below!!!
 from devices.v72m import V72m
@@ -531,44 +541,56 @@ def device_scanning(conn_dev,dev,sk1,ser1,flag):
         conn_type = dve.getConnectionType()
         if (conn_type != USB_CONNECTION_TYPE) and (conn_type != SERIAL_CONNECTION_TYPE):
             conn_par = dve.getConnectionParams()
-            if flag != 0:
-                send_output("\nSearching for " + dve.getDeviceType() + " on " + conn_par[0],sk1,ser1)
-            else:
-                print ("\nSearching for " + dve.getDeviceType() + " on " + conn_par[0])
-            conn_dev.append(copy.deepcopy(dve))
-            if conn_dev[-1].connect() == 1:
-                sens = conn_dev[-1].getSensors()
-                meas = conn_dev[-1].sample()
-                num_sens = sens.split(';')
-                num_meas = meas.split(';')
-                if len(num_sens) != len(num_meas):
-                    conn_dev[-1].terminate()
+            for address in conn_par:
+                if conn_type == I2C_CONNECTION_TYPE:
+                    address_to_check = hex(address)
+                else:
+                    address_to_check = address
+                if flag != 0:
+                    send_output("\nSearching for " + dve.getIdentity() + " on " + address_to_check + " ",sk1,ser1)
+                else:
+                    print ("\nSearching for " + dve.getIdentity() + " on " + address_to_check)
+                    logging.info("Searching for " + dve.getIdentity() + " on " + address_to_check)
+                conn_dev.append(copy.deepcopy(dve))
+                if conn_dev[-1].connect(address) == 1:
+                    sens = conn_dev[-1].getSensors()
+                    meas = conn_dev[-1].sample()
+                    num_sens = sens.split(';')
+                    num_meas = meas.split(';')
+                    if len(num_sens) != len(num_meas):
+                        conn_dev[-1].terminate()
+                        del conn_dev[-1]
+                        continue
+                    if flag != 0:
+                        send_output("FOUND " + conn_dev[-1].getIdentity(),sk1,ser1)
+                        send_output("measures: " + conn_dev[-1].getSensors(),sk1,ser1)
+                    else:
+                        print ("FOUND " + conn_dev[-1].getIdentity())
+                        print ("measures: " + conn_dev[-1].getSensors())
+                        logging.info("FOUND " + conn_dev[-1].getIdentity() + "; " + "measures: " + conn_dev[-1].getSensors())
+                    #updating the number of magnitudes to acquire
+                    num_mag = num_mag + len(num_sens)
+                    #updating device identity for multi-copies purposes
+                    original_identity = conn_dev[-1].getIdentity()
+                    conn_dev[-1].setIdentity(original_identity + "-" + address_to_check)
+                else:
+                    if flag != 0:
+                        send_output(dve.getIdentity() + " NOT FOUND",sk1,ser1)           
+                    else:
+                        print (dve.getIdentity() + " NOT FOUND")
+                        logging.info(dve.getIdentity() + " NOT FOUND")
                     del conn_dev[-1]
                     continue
-                if flag != 0:
-                    send_output("FOUND " + conn_dev[-1].getIdentity(),sk1,ser1)
-                    send_output("measures: " + conn_dev[-1].getSensors(),sk1,ser1)
-                else:
-                    print ("FOUND " + conn_dev[-1].getIdentity())
-                    print ("measures: " + conn_dev[-1].getSensors())
-                #updating the number of magnitudes to acquire
-                num_mag = num_mag + len(num_sens)
-            else:
-                if flag != 0:
-                    send_output(dve.getDeviceType() + " NOT FOUND",sk1,ser1)           
-                else:
-                    print (dve.getDeviceType() + " NOT FOUND")              
-                del conn_dev[-1]
-                continue
     ports = list(serial.tools.list_ports.comports())
     for prt in ports:
         for dv in dev:
             conn_type = dv.getConnectionType()
             if (conn_type == USB_CONNECTION_TYPE) or (conn_type == SERIAL_CONNECTION_TYPE):
                 if flag != 0:
-                    send_output("\nSearching for " + dv.getDeviceType() + " on " + prt[0] + " port",sk1,ser1)
+                    send_output("\nSearching for " + dv.getIdentity() + " on " + prt[0] + " port",sk1,ser1)
                 else:
-                    print ("\nSearching for " + dv.getDeviceType() + " on " + prt[0] + " port")
+                    print ("\nSearching for " + dv.getIdentity() + " on " + prt[0] + " port")
+                    logging.info("Searching for " + dv.getIdentity() + " on " + prt[0] + " port")
                 conn_dev.append(copy.deepcopy(dv))
                 if conn_dev[-1].connect(prt[0]) == 1:
                     sens = conn_dev[-1].getSensors()
@@ -585,14 +607,19 @@ def device_scanning(conn_dev,dev,sk1,ser1,flag):
                     else:
                         print ("FOUND " + conn_dev[-1].getIdentity())
                         print ("measures: " + conn_dev[-1].getSensors())
+                        logging.info("FOUND " + conn_dev[-1].getIdentity() + "; " + "measures: " + conn_dev[-1].getSensors())
                     #updating the number of magnitudes to acquire
                     num_mag = num_mag + len(num_sens)
+                    #updating device identity for multi-copies purposes
+                    original_identity = conn_dev[-1].getIdentity()
+                    conn_dev[-1].setIdentity(original_identity + "-" + prt[0])
                     break
                 else:
                     if flag != 0:
-                        send_output(dv.getDeviceType() + " NOT FOUND",sk1,ser1)           
+                        send_output(dv.getIdentity() + " NOT FOUND",sk1,ser1)           
                     else:
-                        print (dv.getDeviceType() + " NOT FOUND")
+                        print (dv.getIdentity() + " NOT FOUND")
+                        logging.info(dve.getIdentity() + " NOT FOUND")
                     del conn_dev[-1]
             else:
                 continue
@@ -601,6 +628,7 @@ def device_scanning(conn_dev,dev,sk1,ser1,flag):
             send_output("\nNo device connected to SentinAir",sk1,ser1)   
         else:
             print("\nNo device connected to SentinAir")
+            logging.info("No device connected to SentinAir")
     return conn_dev,num_mag
 
 ## getting the devices informations: identity, measurements units, current measurements
