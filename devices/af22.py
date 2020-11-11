@@ -19,12 +19,12 @@
 import socket
 import time
 
-AF22_ADDRESS = "192.168.20.42"
+CONNECTION_TYPE = "eth"
+ETH_ADDRESSES = ["192.168.20.42"]
+DEVICE_IDENTITY = "AF22"
+DEVICE_SENSORS = "so2[ppb]"
+
 AF22_PORT = 8000
-AF22_ID_STRING = "AF22"
-AF22_UNITS = "so2[ppb]"
-AF22_DEVICE_TYPE = "ENVIRONNEMENT-AF22"
-AF22_CONNECTION_TYPE = "eth"
 SOCKET_TIMEOUT = 2
 MAX_NUM_ATTEMPT = 4
 ACK = '\x06'
@@ -33,45 +33,45 @@ ERR_VAL = "-100"
 class Af22:
 
     def __init__(self):
-        self.device_type = AF22_DEVICE_TYPE
-        self.connection_type = AF22_CONNECTION_TYPE
-        self.address = AF22_ADDRESS
-        self.port = AF22_PORT
-        self.portname = str(AF22_PORT)
-        self.identity = ""
-        self.sensors = AF22_UNITS
+        self.identity = DEVICE_IDENTITY
+        self.connection_type = CONNECTION_TYPE
+        self.sensors = DEVICE_SENSORS
+        self.addresses = ETH_ADDRESSES
+        self.address = None
         self.sk = None
+        self.port = AF22_PORT
         self.status = 'U'
         self.alarm = None
 
 ## the function "connect" check if the device is plugged into Ethernet port,
 ## then returns 1 if the device is found          
-    def connect(self):
+    def connect(self,address):
+        found = 0
         try: 
             self.sk = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             self.sk.settimeout(SOCKET_TIMEOUT)
         except Exception as e:
-            return 0        
-        command = chr(2) + AF22_ID_STRING + "16"
+            return found       
+        command = chr(2) + "AF22" + "16"
         tocalc = command.encode()
         c1,c2 = self.BCCcalc(tocalc)
         command = command + chr(c1) + chr(c2) + chr(3)
         tent = 0
         while tent < MAX_NUM_ATTEMPT:
             try:
-                sent = self.sk.sendto(command.encode(), (self.address,self.port))
+                sent = self.sk.sendto(command.encode(), (address,self.port))
                 data1, server = self.sk.recvfrom(1024)
                 data = data1.decode()
             except socket.timeout:
                 if tent >= MAX_NUM_ATTEMPT:
-                    return 2
+                    return found
                 else:
                     tent = tent + 1
                     time.sleep(0.2)
                     continue
             except Exception as e:
                 if tent >= MAX_NUM_ATTEMPT:
-                    return 3
+                    return found
                 else:
                     tent = tent + 1
                     time.sleep(0.2)
@@ -83,13 +83,15 @@ class Af22:
                 time.sleep(0.2)
                 continue 
             if (data[0]== ACK):
-                self.identity = self.identity + str(data[1:5])
+                self.identity = str(data[1:5])
                 self.status = data[13]
                 self.alarm = str(data[14]) + str(data[15])
-                return 1
+                self.address = address
+                found = 1
+                return found
 
     def getConnectionParams(self):
-        return [self.address,self.portname]
+        return self.addresses
 
     def getConnectionType(self):
         return self.connection_type
@@ -97,11 +99,24 @@ class Af22:
     def getIdentity(self):
         return self.identity
 
+    def setIdentity(self,idstring):
+        self.identity = idstring
+        
     def getSensors(self):
         return self.sensors
 
-    def getDeviceType(self):
-        return self.device_type
+    def terminate(self):
+        try:
+            self.sk.close()
+        except:
+            return
+
+    def __del__(self):
+        try:
+            self.sk.close()
+        except:
+            return
+
 
     def BCCcalc(self,mb):
         BCC = 0
@@ -119,7 +134,7 @@ class Af22:
 ## then returns a string separate by semicolon containing data
 ## if an error happens, it returns the string with err value: "-100.0"
     def sample(self):
-        command = chr(2) + AF22_ID_STRING + "16"
+        command = chr(2) + "AF22" + "16"
         tocalc = command.encode()
         c1,c2 = self.BCCcalc(tocalc)
         command = command + chr(c1) + chr(c2) + chr(3)
@@ -155,18 +170,3 @@ class Af22:
                 else:
                     return strm[0]
         return ERR_VAL
-
-
-    def terminate(self):
-        try:
-            self.sk.close()
-        except:
-            return
-
-
-    def __del__(self):
-        try:
-            self.sk.close()
-        except:
-            return
-

@@ -15,9 +15,11 @@
 import serial
 import time
 
-IRCA1_DEVICE_TYPE = "IRC-A1"
-IRCA1_CONNECTION_TYPE = "usb"
-IRCA1_BAUD_RATE = 19200
+DEVICE_IDENTITY = "IRC-A1"
+CONNECTION_TYPE = "usb"
+DEVICE_BAUD_RATE = 19200
+DEVICE_SENSORS = "co2[ppm]"
+
 SERIAL_TIMEOUT = 2
 MAX_NUM_ATTEMPT = 4
 ERR_VAL = "-100"
@@ -25,25 +27,52 @@ ERR_VAL = "-100"
 class Irca1:
 
     def __init__(self):
-        self.device_type = IRCA1_DEVICE_TYPE
-        self.identity = ""
-        self.connection_type = IRCA1_CONNECTION_TYPE
-        self.baud_rate = IRCA1_BAUD_RATE
-        self.sensors = "co2[ppm]"
+        self.identity = DEVICE_IDENTITY
+        self.connection_type = CONNECTION_TYPE
+        self.baud_rate = DEVICE_BAUD_RATE
+        self.sensors = DEVICE_SENSORS
         self.port = None
         self.portname = ""
+
+    def getConnectionParams(self):
+        return [self.portname,self.baud_rate]
+
+    def getConnectionType(self):
+        return self.connection_type
+
+    def getIdentity(self):
+        return self.identity
+
+    def setIdentity(self,idstring):
+        self.identity = idstring
+
+    def getSensors(self):
+        return self.sensors
+
+    def terminate(self):
+        try:
+            self.port.close()
+        except:
+            return
+
+    def __del__(self):
+        try:
+            self.port.close()
+        except:
+            return
 
 ## the function "connect" check if the device is plugged into serport,
 ## then returns 1 if irca1 is found
     def connect(self,serport):
+        found = 0
         if (serport.find("ttyACM") >= 0):
-            return 0
+            return found
         if (serport.find("ttyAMA") >= 0):
-            return 0
+            return found
         try:
             self.port = serial.Serial(serport,self.baud_rate, timeout = SERIAL_TIMEOUT, rtscts=0)
         except:
-            return 0
+            return found
         num_attempt = 0
         while num_attempt < MAX_NUM_ATTEMPT:
             try:
@@ -55,27 +84,13 @@ class Irca1:
                 res3 = float(res2)
                 srp = serport.split("/")
                 srp1 = srp[-1]
-                self.identity = "IRCA1-" + srp1
                 self.portname = serport
-                return 1
+                found = 1
+                return found
             except:
                 num_attempt = num_attempt + 1
-        return 0
-    
-    def getConnectionParams(self):
-        return [self.portname,self.baud_rate]
+        return found
 
-    def getConnectionType(self):
-        return self.connection_type
-
-    def getIdentity(self):
-        return self.identity
-
-    def getSensors(self):
-        return self.sensors
-
-    def getDeviceType(self):
-        return self.device_type
 
 ## the function "sample" reads the sensor output,
 ## then returns a string separate by semicolon containing data
@@ -92,18 +107,3 @@ class Irca1:
             return buf4
         except Exception as e:
             return ERR_VAL
-
-
-    def terminate(self):
-        try:
-            self.port.close()
-        except:
-            return
-
-
-    def __del__(self):
-        try:
-            self.port.close()
-        except:
-            return
-

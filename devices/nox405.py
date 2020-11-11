@@ -20,38 +20,69 @@ import _thread
 import time
 import serial
 
-NOX405_IDSTRING = "NO2,NO,NOx,ZNO2,ZNO,Tc,P,Fc,Foz,PDVs,PDVg,Ts,Date,Time,Mode\r\n"
-NOX405_BAUD_RATE = 2400
-NOX405_DEVICE_TYPE = "2B-NOX405"
-NOX405_CONNECTION_TYPE = "usb"
+CONNECTION_TYPE = "usb"
+DEVICE_IDENTITY = "2B-NOX405"
+DEVICE_SENSORS = "no2[ppb];no[ppb];nox[ppb]"
+DEVICE_BAUD_RATE = 2400
+
 SERIAL_TIMEOUT = 2
 MAX_NUM_ATTEMPT = 6
 ERR_VAL = "-100"
+NOX405_IDSTRING = "NO2,NO,NOx,ZNO2,ZNO,Tc,P,Fc,Foz,PDVs,PDVg,Ts,Date,Time,Mode\r\n"
 
 class Nox405:
 
     def __init__(self):
-        self.device_type = NOX405_DEVICE_TYPE
-        self.identity = ""
-        self.connection_type = NOX405_CONNECTION_TYPE
-        self.baud_rate = NOX405_BAUD_RATE
-        self.sensors = "no2[ppb];no[ppb];nox[ppb]"
-        self.strmeas = "0.0;0.0;0.0"
+        self.identity = DEVICE_IDENTITY
+        self.connection_type = CONNECTION_TYPE
+        self.baud_rate = DEVICE_BAUD_RATE
+        self.sensors = DEVICE_SENSORS
         self.port = None
         self.portname = ""
         self.lesteningthread = 0
+        self.strmeas = "0.0;0.0;0.0"
+
+    def getConnectionParams(self):
+        return [self.portname,self.baud_rate]
+
+    def getConnectionType(self):
+        return self.connection_type
+
+    def getIdentity(self):
+        return self.identity
+
+    def setIdentity(self,idstring):
+        self.identity = idstring
+        
+    def getSensors(self):
+        return self.sensors
+
+    def terminate(self):
+        self.lesteningthread = 0
+        try:
+            self.port.close()
+        except:
+            return
+
+    def __del__(self):
+        self.lesteningthread = 0
+        try:
+            self.port.close()
+        except:
+            return
 
 ## the function "connect" check if the device is plugged into serport,
 ## then returns 1 if the device is found
     def connect(self,serport):
+        found = 0
         if (serport.find("ttyACM")>= 0):
-            return 0
+            return found
         if (serport.find("ttyAMA")>= 0):
-            return 0
+            return found
         try:
             self.port = serial.Serial(serport,self.baud_rate, timeout = SERIAL_TIMEOUT, rtscts=0)
         except Exception as e:
-            return 0
+            return found
         num_attempt = 0
         while num_attempt < MAX_NUM_ATTEMPT:
             try:
@@ -61,9 +92,10 @@ class Nox405:
                     self.lesteningthread = 1
                     ser = serport.split("/")
                     ser1 = ser[-1]
-                    self.identity = self.identity + NOX405_DEVICE_TYPE + "-" + ser1
                     _thread.start_new_thread(self.__capture,())
-                    return 1
+                    self.portname = serport
+                    found = 1
+                    return found
                 elif idstr == "":
                     num_attempt = num_attempt + 1
                     time.sleep(0.5)
@@ -75,22 +107,7 @@ class Nox405:
             except:
                 num_attempt = num_attempt + 1
                 time.sleep(0.5)
-        return 0
-
-    def getConnectionParams(self):
-        return [self.portname,self.baud_rate]
-
-    def getConnectionType(self):
-        return self.connection_type
-
-    def getIdentity(self):
-        return self.identity
-
-    def getSensors(self):
-        return self.sensors
-
-    def getDeviceType(self):
-        return self.device_type
+        return found
 
 ## the function "sample" reads the sensor output,
 ## then returns a string separate by semicolon containing data
@@ -111,19 +128,3 @@ class Nox405:
                         self.strmeas = ERR_VAL + ';' + ERR_VAL + ";" + ERR_VAL
             except Exception as e:
                 self.strmeas = ERR_VAL + ';' + ERR_VAL + ";" + ERR_VAL
-
-
-    def terminate(self):
-        self.lesteningthread = 0
-        try:
-            self.port.close()
-        except:
-            return
-
-
-    def __del__(self):
-        self.lesteningthread = 0
-        try:
-            self.port.close()
-        except:
-            return

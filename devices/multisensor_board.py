@@ -18,6 +18,15 @@ import struct
 import time
 from collections import deque
 
+
+CONNECTION_TYPE = "usb"
+DEVICE_IDENTITY = "MULTISENSOR"
+DEVICE_SENSORS = ""
+DEVICE_BAUD_RATE = 115200
+
+SERIAL_TIMEOUT = 2
+MAX_NUM_ATTEMPT = 10
+
 ERR_VAL = "-100"
 
 #define the max number of time that I send the message if the multisensor answer wrong
@@ -42,11 +51,6 @@ MODBUS_DATA_NUMBER_OF_MEASURE = 0x14
 #set the MODBUS address of the board, it is configured using the dip switch on the board
 multisensor_address = 0x2
 
-MULTISENS_BAUD_RATE = 115200
-MULTISENS_CONNECTION_TYPE = "usb"
-MULTISENS_DEVICE_TYPE = "MULTISENS"
-SERIAL_TIMEOUT = 2
-MAX_NUM_ATTEMPT = 10
 
 def get_multisensor_address():
     return multisensor_address
@@ -421,36 +425,67 @@ def read_MEASUREMENTS_NAME(ser, address,measure_number):
 
 class Multisensor_board:
     def __init__(self):
-        self.identity = ""
-        self.sensors = ""
-        self.sn = ""
+        self.identity = DEVICE_IDENTITY
+        self.connection_type = CONNECTION_TYPE
+        self.sensors = DEVICE_SENSORS
+        self.baud_rate = DEVICE_BAUD_RATE
+        self.port = None
         self.portname = ""
         self.num_sensors = 0
-        self.baud_rate = MULTISENS_BAUD_RATE
-        self.connection_type = MULTISENS_CONNECTION_TYPE
-        self.device_type = MULTISENS_DEVICE_TYPE
+        self.sn = ""
+        
+    def getConnectionParams(self):
+        return [self.portname,self.baud_rate]
+
+    def getConnectionType(self):
+        return self.connection_type
+
+    def getIdentity(self):
+        return self.identity
+
+    def setIdentity(self,idstring):
+        self.identity = idstring
+
+    def getSN(self):
+        return self.sn
+    
+    def getSensors(self):
+        return self.sensors
+
+    def terminate(self):
+        try:
+            self.port.close()
+        except:
+            return
+
+    def __del__(self):
+        try:
+            self.port.close()
+        except:
+            return
 
 ## the function "connect" check if the device is plugged into serport,
 ## then returns 1 if the device is found
     def connect(self,serport):
+        found = 0
         if(serport.find("ttyUSB")>=0) or (serport.find("ttyAMA")>=0):
-            return 0
+            return found
         try:
             self.port = serial.Serial(serport,self.baud_rate, timeout = SERIAL_TIMEOUT, rtscts=0)
         except Exception as e:
-            return 0
+            return found
         data_in=read_SERIAL_NUMBER(self.port, multisensor_address)
         time.sleep(0.1)
         try:
             self.sn = str(int(data_in.hex(),16))
         except Exception as e:
             self.sn = ""
-            return 2
+            return found
         res = write_MEASURE_CYCLE(self.port,multisensor_address,0)
         time.sleep(0.2)  
         ww = write_SCAN_AFE(self.port, multisensor_address)
         if ww == 0:
-            return 3
+            return found
         time.sleep(0.2)
         multisensor_ready=read_READY(self.port, multisensor_address)
         num_attempt=0
@@ -475,28 +510,9 @@ class Multisensor_board:
         res = write_MEASURE_CYCLE(self.port,multisensor_address,3)
         srp = serport.split("/")
         srp1 = srp[-1]
-        self.identity = self.identity + "-" + srp1
-        self.identity = "TS-" + srp1
         self.portname = serport
-        return 1
-
-    def getConnectionParams(self):
-        return [self.portname,self.baud_rate]
-
-    def getConnectionType(self):
-        return self.connection_type
-
-    def getIdentity(self):
-        return self.identity
-
-    def getSN(self):
-        return self.sn
-    
-    def getSensors(self):
-        return self.sensors
-
-    def getDeviceType(self):
-        return self.device_type
+        found = 1
+        return found
 
 ## the function "sample" reads the sensor output,
 ## then returns a string separate by semicolon containing data
@@ -517,17 +533,3 @@ class Multisensor_board:
             for i in range (1, self.num_sensors + 1):
                 string = string + ERR_VAL + ";"
             return string.rstrip(";")
-
-
-    def terminate(self):
-        try:
-            self.port.close()
-        except:
-            return
-
-  
-    def __del__(self):
-        try:
-            self.port.close()
-        except:
-            return
