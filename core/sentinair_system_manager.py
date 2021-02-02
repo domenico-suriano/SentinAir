@@ -13,6 +13,11 @@
 # limitations under the License.
 
 installed_devices = []
+#bme280 has been installed in SentinAir on 2020-12-15_10-00-51
+# do not remove or modify the next three lines below!!!
+from devices.bme280 import Bme280
+bme280_obj = Bme280()
+installed_devices.append(bme280_obj)
 #mcp342x has been installed in SentinAir on 2020-11-02_11-55-33
 # do not remove or modify the next three lines below!!!
 from devices.mcp342x import Mcp342x
@@ -148,11 +153,11 @@ UDP_CLI_PORT_ERR_MSG = "\n" + UDP_CLI_PORT_ERR_LOG_MSG + "\n"
 DATA_SERVER_ERR_MSG = "\n" + DATA_SERVER_ERR_LOG_MSG + "\n"
 DATA_SERVER_PORT_ERR_MSG = "\n" + DATA_SERVER_PORT_ERR_LOG_MSG + "\n"
 DATA_SENDING_ERR_MSG = "\n" + DATA_SENDING_ERR_LOG_MSG + "\n"
-DATA_FILE_OPENING_ERR = "Impossible opening storage data file. Measurement sesssion stopped with error"
-MEAS_STOP_ERR_MSG = "Measurement session stopped with error"
+DATA_FILE_OPENING_ERR = "\nImpossible opening storage data file. Measurement sesssion stopped with error"
+MEAS_STOP_ERR_MSG = "\nMeasurement session stopped with error"
 SYS_READY = "\n" + SYS_READY_LOG_MSG + "\n"
-INV_CMD = "Command not valid!\n"
-DATA_PORT_OPEN_ERR_MSG = DATA_PORT_OPEN_ERR_LOG_MSG + "\n"
+INV_CMD = "\nCommand not valid!\n"
+DATA_PORT_OPEN_ERR_MSG = "\n" + DATA_PORT_OPEN_ERR_LOG_MSG + "\n"
 MAIL_CONFIG_NULL = "\nE-mail account is not present: the imap-smtp interface will not start\n"
 
 
@@ -531,6 +536,9 @@ def mean_daily(dprev,dnow,stepdn,smd,rec,fh,el):
 ## devices scanning: this routine search devices and the ports where they are plugged into.
 ## Then it creates the connections
 def device_scanning(conn_dev,dev,sk1,ser1,flag):
+    global fault
+    #resetting the fault alarm
+    fault = False
     # number of magnitudes to acquire
     num_mag = 0
     for cn in conn_dev:
@@ -735,19 +743,22 @@ def init_session(conn_dvc,rt):
 def session_closing(sk,fh1,fhmh1,fhmd1,errl):
     global rate
     global measure
+    global fault
     rate = 0
     measure = NO_MEAS
     res = close_file(fh1)
-    GPIO.output(19,GPIO.LOW)
+    GPIO.output(13,GPIO.LOW)
     if errl > 0:
-        GPIO.output(13,GPIO.HIGH)        
+        fault = True
+        _thread.start_new_thread(fault_alarm,())
+    else:
+        fault = False
     if res == 0:
         send_data(sk,"File " + fh1.name + " closed")
         logging.info("File " + fh1.name + " closed")
     else:
         send_data(sk,"Impossible closing " + fh1.name + "\n\nsession stopped with error")
         logging.warning("Impossible closing " + fh1.name + ". session stopped with error")
-        GPIO.output(13,GPIO.HIGH)
     res = close_file(fhmh1)
     if res == 0:
         send_data(sk,"File " + fhmh1.name + " closed")
@@ -772,6 +783,7 @@ def capture(sk,conn_dvc):
     global datacolsd
     global measure
     global curfile
+    global fault
     del datacols[:]
     del datacolsh[:]
     del datacolsd[:]
@@ -784,10 +796,7 @@ def capture(sk,conn_dvc):
     dayprev = time.strftime("%d/%m/%Y")
     hourprev = datetime.now().hour
     ##############################
-    try:
-        GPIO.output(13,GPIO.LOW)
-    except Exception as e:
-        logging.warning(INIT_CAPT_GPIO_ERR_LOG_MSG,exc_info=True)
+    fault = False
     try:
         errorLevel, fh, curfile, fhmh, fhmd, head = init_session(conn_dvc,rate)## builds the measurements record
     except Exception as e:
@@ -797,8 +806,9 @@ def capture(sk,conn_dvc):
         send_data(sk,DATA_FILE_OPENING_ERR) 
         logging.warning(DATA_FILE_OPENING_ERR)
         try:
-            GPIO.output(13,GPIO.HIGH)
-            GPIO.output(19,GPIO.LOW)
+            GPIO.output(13,GPIO.LOW)
+            fault = True
+            _thread.start_new_thread(fault_alarm,())
         except Exception as e:
             logging.warning(INIT_CAPT_GPIO_ERR_LOG_MSG_2,exc_info=True)
         session_closing(sk,fh,fhmh,fhmd,errorLevel) 
@@ -864,7 +874,7 @@ def capture(sk,conn_dvc):
     adesso = time.time()
     res = measure_logging(fh,tolog)
     while(rate!=0):## loop where devices are read if it is the time
-        GPIO.output(19,GPIO.HIGH)
+        GPIO.output(13,GPIO.HIGH)
         dopo = time.time()
         diff = int(dopo-adesso)
         if(diff>=rate):## now it is the time to read the devices, gather and treat the data
@@ -928,28 +938,37 @@ def my_callback(channel):
         return
     try:
         rate = 0
-        GPIO.output(26,GPIO.LOW)
+        GPIO.output(13,GPIO.LOW)
         time.sleep(0.5)
-        GPIO.output(26,GPIO.HIGH)
+        GPIO.output(13,GPIO.HIGH)
         time.sleep(0.5)
-        GPIO.output(26,GPIO.LOW)
+        GPIO.output(13,GPIO.LOW)
         time.sleep(0.5)
-        GPIO.output(26,GPIO.HIGH)
+        GPIO.output(13,GPIO.HIGH)
         logging.warning(SHUTDOWN_BUTTON_PRESSED)
         os.popen("sudo shutdown -h now")
     except Exception as e:
         print ("Shutdown system failed!")
 
-## function to make blink the red check light
-def red_blinking():
+## function to make blink the yellow check light
+def led_blinking():
     global blink
     while blink:
+        GPIO.output(13,GPIO.HIGH)
+        time.sleep(0.2)
+        GPIO.output(13,GPIO.LOW)
+        time.sleep(0.2)
+    GPIO.output(13,GPIO.LOW)
+
+## function to make blink the red check light for fault indication
+def fault_alarm():
+    global fault
+    while fault:
         GPIO.output(26,GPIO.HIGH)
         time.sleep(0.2)
         GPIO.output(26,GPIO.LOW)
         time.sleep(0.2)
     GPIO.output(26,GPIO.HIGH)
-
 
 ## function to get started udp socket communications with user interfaces
 def init_consolle():
@@ -1041,11 +1060,13 @@ def mail_account_check(maf):
 #### MAIN #######
 global rate
 global blink
+global fault
 datacols = []
 datacolsh = []
 datacolsd = []
 rate = 0
 blink = True
+fault = False
 srv = None
 measure = NO_MEAS
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG,format='%(asctime)s - %(message)s',datefmt='%d/%m/%Y_%H:%M:%S')
@@ -1056,7 +1077,7 @@ print (INIT_MSG)
 try:
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(26,GPIO.OUT)#red
-    GPIO.setup(19,GPIO.OUT)#green
+    #GPIO.setup(19,GPIO.OUT)#green
     GPIO.setup(13,GPIO.OUT)#yellow
     GPIO.output(26,GPIO.HIGH)
     GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -1071,7 +1092,7 @@ if sock == None:
     logging.warning("Init command line interface failed!")
 
 #### device connected scanning
-_thread.start_new_thread(red_blinking,())
+_thread.start_new_thread(led_blinking,())
 number_devices = 0
 connected_devices,number_devices = device_scanning(connected_devices,installed_devices,sock,srv,0)
 blink = False
