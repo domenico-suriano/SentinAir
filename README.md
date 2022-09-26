@@ -17,7 +17,7 @@ Here below are summarized the instruments which drivers have been already develo
 | Device | Device driver | Connection interface | Suppier or manufacturer |
 |       ---      |              ---             |                        ---                     |                            ---                         |
 | 106L GO3 pro package (CO2and O3 monitor) | go3.py | USB | 2B technologies |
-
+|       ---      |              ---             |                        ---                     |                            ---                         |
 # Last Updates
 
 26 september 2022
