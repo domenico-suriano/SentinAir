@@ -14,7 +14,7 @@ This is a quick procedure to install the SentinAir software making the minimum s
 # Using SentinAir
 After following the "quick installation" procedure, plug into one of the system ports your sensors/devices/instruments and give power to the device. Wait for a few of seconds, you will see the green light asynchronously blinking (this indicates that the system is starting up). After few seconds, the yellow light will start blinking fastly. This means that the system is performing the port scanning and the devices/sensor/instrument connection. Wait for few tens of seconds, then the red check light will turn on. When the yellow light stops blinking and turns on, the system is ready and it is already performing the data acquisition. To shut down SentinAir, press for few seconds the "stop button", then the yellow check light will start blinking. Wait for each light turns off, then unplug the power cable. For more detials to use the SentinAir system, please, refer to the [user guide](https://github.com/domenico-suriano/SentinAir/blob/master/guide/sentinair-user-guide-1.41.pdf) released in this repository. An overview of the SentinAir system use is shown in the video you can see by clicking on the pictures at the bottom of this page.
 Here below are summarized the instruments which drivers have been already developed and incorporated in the sentinAIr software, and therefore, readily usable with sentinAir.
-| Device | Device driver | Connection interface | Suppier or manufacturer |
+| Device | Device driver | Connection interface | Supplier or manufacturer |
 |     :---:    |            :---:            |                      :---:                   |                         :---:                        |
 |106L GO3 pro package (CO2and O3 monitor)|go3.py|USB|2B technologies|
 |405nm (NOx monitor)|nox405.py |USB|2B technologies|
@@ -23,6 +23,16 @@ Here below are summarized the instruments which drivers have been already develo
 |AC32M (NOx chemical analyzer)|ac32.py |Ethernet port|Environnement|
 |O342M (O3 chemical analyzer)|o342.py |Ethernet port|Environnement|
 |VOC72M (VOCchemical analyzer)|v72m.py |Ethernet port|Environnement|
+Here below are listed the sensors having a I2C, TTL serial port, or USB hardware interface, which drivers have been already developed and incorporated in the sentinAIr software, and therefore, readily usable with sentinAir. This list does not include the sensors featured by only an analog output interface.
+| Sensor | Sensor driver | Connection interface | Supplier or manufacturer |
+|     :---:    |            :---:            |                      :---:                   |                         :---:                        |
+|BME280 (atmospheric pressure, temperature, and relative humidity)|bme280.py|I2C|Bosch Sensortec|
+|BH1750 (luxmeter)|nox405.py |I2C|ROHM semiconductor|
+|PMS5003 (PM sensor)|pms5003.py |TTL serial port|Plantower|
+|PMS3003 (PM sensor)|pms3003.py |TTL serial port|Plantower|
+|MHZ19 (CO2 sensor)|mhz19.py |TTL serial port|Winsen|
+|IRC-A1 (CO2 sensor)|irca1.py |USB|Alphasense|
+|SPS30 (PM sensor)|sps30.py |TTL serial port|Sensirion|
 # Last Updates
 
 26 september 2022
