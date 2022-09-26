@@ -35,6 +35,9 @@ Here below are listed the sensors having a I2C, TTL serial port, or USB hardware
 |MHZ19 (CO2 sensor)|mhz19.py |TTL serial port|Winsen|
 |IRC-A1 (CO2 sensor)|irca1.py |USB|Alphasense|
 |SPS30 (PM sensor)|sps30.py |TTL serial port|Sensirion|
+
+In order to use the sensors featured by just the analog hardware interface, drivers for some Analog-to-DIgital Converter (ADC) boards have been already developed and incorporated in the SentinAIr software. Currently, they are the [ADC Pi board](https://www.abelectronics.co.uk/p/69/adc-pi-raspberry-pi-analogue-to-digital-converter) by [ABelectronics](https://www.abelectronics.co.uk/), the [Multisensor board](https://www.tecnosens.it/en/multisensor) by [Tecnosens](https://www.tecnosens.it/en), and the Lcss adapter which is an open source project you can find [here](https://github.com/domenico-suriano/Lcss-adapter-board) .
+
 # Last Updates
 
 26 september 2022
