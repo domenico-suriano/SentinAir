@@ -17,6 +17,12 @@ After following the "quick installation" procedure, plug into one of the system 
 
 # Last Updates
 
+26 september 2022
+
+-a) updated "sentinair-system-manager.py" to fix a bug in logging the device scanning reports
+
+-b) added the drivers for SPS30 (PM sensor), PMS5003 (PM sensor), and MHZ19 (CO2 sensor)
+
 2 february 2021
 
 -a) updated "sentinair-system-manager.py" to modify the check light behaviour
