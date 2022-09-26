@@ -23,7 +23,9 @@ Here below are summarized the instruments which drivers have been already develo
 |AC32M (NOx chemical analyzer)|ac32.py |Ethernet port|Environnement|
 |O342M (O3 chemical analyzer)|o342.py |Ethernet port|Environnement|
 |VOC72M (VOCchemical analyzer)|v72m.py |Ethernet port|Environnement|
+
 Here below are listed the sensors having a I2C, TTL serial port, or USB hardware interface, which drivers have been already developed and incorporated in the sentinAIr software, and therefore, readily usable with sentinAir. This list does not include the sensors featured by only an analog output interface.
+
 | Sensor | Sensor driver | Connection interface | Supplier or manufacturer |
 |     :---:    |            :---:            |                      :---:                   |                         :---:                        |
 |BME280 (atmospheric pressure, temperature, and relative humidity)|bme280.py|I2C|Bosch Sensortec|
