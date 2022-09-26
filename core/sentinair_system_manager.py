@@ -13,8 +13,22 @@
 # limitations under the License.
 
 installed_devices = []
-#bme280 has been installed in SentinAir on 2020-12-15_10-00-51
+#mhz19 has been installed in SentinAir on 2021-02-02_09-25-56
 # do not remove or modify the next three lines below!!!
+from devices.mhz19 import Mhz19
+mhz19_obj = Mhz19()
+installed_devices.append(mhz19_obj)
+#sps30 has been installed in SentinAir on 2021-02-02_09-25-38
+# do not remove or modify the next three lines below!!!
+from devices.sps30 import Sps30
+sps30_obj = Sps30()
+installed_devices.append(sps30_obj)
+#pms5003 has been installed in SentinAir on 2021-02-02_09-25-27
+# do not remove or modify the next three lines below!!!
+from devices.pms5003 import Pms5003
+pms5003_obj = Pms5003()
+installed_devices.append(pms5003_obj)
+#bme280 has been installed in SentinAir on 2020-12-15_10-00-51
 from devices.bme280 import Bme280
 bme280_obj = Bme280()
 installed_devices.append(bme280_obj)
@@ -76,11 +90,7 @@ installed_devices.append(nox405_obj)
 from devices.o342 import O342
 o342_obj = O342()
 installed_devices.append(o342_obj)
-#pms3003 has been installed in SentinAir on 2020-05-20_15-21-41
 # do not remove or modify the next three lines below!!!
-from devices.pms3003 import Pms3003
-pms3003_obj = Pms3003()
-installed_devices.append(pms3003_obj)
 # do not remove or modify the next three lines below!!!
 #multisensore has been installed in SentinAir on 2020-05-09_22-23-17
 # do not remove or modify the next three lines below!!!
@@ -627,7 +637,7 @@ def device_scanning(conn_dev,dev,sk1,ser1,flag):
                         send_output(dv.getIdentity() + " NOT FOUND",sk1,ser1)           
                     else:
                         print (dv.getIdentity() + " NOT FOUND")
-                        logging.info(dve.getIdentity() + " NOT FOUND")
+                        logging.info(dv.getIdentity() + " NOT FOUND")
                     del conn_dev[-1]
             else:
                 continue
