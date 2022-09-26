@@ -18,6 +18,11 @@ Here below are summarized the instruments which drivers have been already develo
 |     :---:    |            :---:            |                      :---:                   |                         :---:                        |
 |106L GO3 pro package (CO2and O3 monitor)|go3.py|USB|2B technologies|
 |405nm (NOx monitor)|nox405.py |USB|2B technologies|
+|CO12M (CO chemical analyzer)|co12m.py |Ethernet port|Environnement|
+|AF22M (SO2 chemical analyzer)|af22.py |Ethernet port|Environnement|
+|AC32M (NOx chemical analyzer)|ac32.py |Ethernet port|Environnement|
+|O342M (O3 chemical analyzer)|o342.py |Ethernet port|Environnement|
+|VOC72M (VOCchemical analyzer)|v72m.py |Ethernet port|Environnement|
 # Last Updates
 
 26 september 2022
