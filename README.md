@@ -16,7 +16,7 @@ After following the "quick installation" procedure, plug into one of the system 
 Here below are summarized the instruments which drivers have been already developed and incorporated in the sentinAIr software, and therefore, readily usable with sentinAir.
 | Device | Device driver | Connection interface | Suppier or manufacturer |
 |       ---      |              ---             |                        ---                     |                            ---                         |
-| 106L GO3 pro package (CO2and O3 monitor) | go3.py | USB | 2B technologies |
+|106L GO3 pro package (CO2and O3 monitor)|go3.py|USB|2B technologies|
 |       ---      |              ---             |                        ---                     |                            ---                         |
 # Last Updates
 
