@@ -36,7 +36,37 @@ Here below are listed the sensors having a I2C, TTL serial port, or USB hardware
 |IRC-A1 (CO2 sensor)|[irca1.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/irca1.py) |USB|[Alphasense](https://www.alphasense.com/product_type/target-gas/)|
 |SPS30 (PM sensor)|[sps30.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/sps30.py) |TTL serial port|[Sensirion](https://sensirion.com)|
 
-In order to use the sensors featured by just the analog hardware interface, drivers for some Analog-to-DIgital Converter (ADC) boards have been already developed and incorporated in the SentinAIr software. Currently, they are the [ADC Pi board](https://www.abelectronics.co.uk/p/69/adc-pi-raspberry-pi-analogue-to-digital-converter) (which driver is [mcp342x.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/mcp342x.py)) by [ABelectronics](https://www.abelectronics.co.uk/), the [Multisensor board](https://www.tecnosens.it/en/multisensor) (which driver is [multisensor_board.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/multisensor_board.py)) by [Tecnosens](https://www.tecnosens.it/en), and the Lcss adapter which is an open source project you can find [here](https://github.com/domenico-suriano/Lcss-adapter-board) .
+In order to use the sensors featured by just the analog hardware interface, drivers for some Analog-to-DIgital Converter (ADC) boards have been already developed and incorporated in the SentinAIr software. Currently, they are the [ADC Pi board](https://www.abelectronics.co.uk/p/69/adc-pi-raspberry-pi-analogue-to-digital-converter) (which driver is [mcp342x.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/mcp342x.py)) by [ABelectronics](https://www.abelectronics.co.uk/), the [Multisensor board](https://www.tecnosens.it/en/multisensor) (which driver is [multisensor_board.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/multisensor_board.py)) by [Tecnosens](https://www.tecnosens.it/en), and the Lcss adapter which is an open source project you can find [here](https://github.com/domenico-suriano/Lcss-adapter-board).
+
+In the list shown below, there are some examples of sensors featured by an analog output signal that can be readily used in the SentinAir system. The list does not cover every sensor or device available on the market usable with SentinAir, because its purpose is just to provide an idea about the flexibility of the system proposed. Therefore, this is a partial list which wants to provide some examples. Moreover, we must consider that any analog sensor has to be used through its support board, usually provided by the manufacturer, or the supplier, or built by the user, and one of the boards acting as adapter to the SentinAir system, such as: the ADC Pi board, the LCSS adapter, or the Multisensor board.
+
+| Sensor | Support board name | Adapter board| Sensor supplier or manufacturer |
+|     :---:    |            :---:            |                      :---:                   |                         :---:                        |
+|CO-BX (CO sensor)|[ISB by Alphasense](https://www.alphasense.com/products/support-circuits-air/) or [Alphasense-B4-multisensor-board](https://github.com/domenico-suriano/Alphasense-B4-multisensor-board) |ADC Pi or LCSS adapter|[Alphasense](https://www.alphasense.com)|
+|NO2-B43F (NO2 sensor)|ISB by Alphasense or Alphasense-B4-multisensor-board|ADC Pi or LCSS adapter|Alphasense|
+|NO-B4 (NO sensor)|ISB by Alphasense |ADC Pi or LCSS adapter|Alphasense|
+|OX-B431 (O3 sensor)|ISB by Alphasense or Alphasense-B4-multisensor-board|ADC Pi or LCSS adapter|Alphasense|
+|SO2-B4 (SO2 sensor)|ISB by Alphasense or Alphasense-B4-multisensor-board|ADC Pi or LCSS adapter|Alphasense|
+|H2S-B4 (H2S sensor)|ISB by Alphasense or Alphasense-B4-multisensor-board|ADC Pi or LCSS adapter|Alphasense|
+|CO-A4 (CO sensor)|[AFE by Alphasense](https://www.alphasense.com/products/support-circuits-air/)|ADC Pi or LCSS adapter|Alphasense|
+|NO-A4 (NO sensor)|AFE by Alphasense|ADC Pi or LCSS adapter|Alphasense|
+|SO2-A4 (SO2 sensor)|AFE by Alphasense|ADC Pi or LCSS adapter|Alphasense|
+|OX-A431 (O3 sensor)|AFE by Alphasense|ADC Pi or LCSS adapter|Alphasense|
+|H2S-A4 (H2S sensor)|AFE by Alphasense|ADC Pi or LCSS adapter|Alphasense|
+|PID-A12 (VOC sensor)|AFE by Alphasense|ADC Pi or LCSS adapter|Alphasense|
+|PID-AH2 (VOC sensor)|AFE by Alphasense|ADC Pi or LCSS adapter|Alphasense|
+|GS+4CO (CO sensor)|[AFE by TEcnosens](https://www.tecnosens.it/en/application-sectors/multigas-monitor/multisensor-board)|[Multisensor board by Tecnosens](https://www.tecnosens.it/en/application-sectors/multigas-monitor/multisensor-board)|[DDScientific](https://www.ddscientific.com)|
+|GS+4ETO (ETO sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|DDScientific|
+|GS+4NH3-100 (NH3 sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|DDScientific|
+|GS+4NO (NO sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|DDScientific|
+|GS+4NO2 (NO2 sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|DDScientific|
+|GS+4CL2 (Cl2 sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|DDScientific|
+|GS+4SO2 (SO2 sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|DDScientific|
+|TDS 0035(CH4 sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|[Dynament](https://www.dynament.com/data-old/premier-series/)|
+|TDS 0058(CH4 sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|[Dynament](https://www.dynament.com/data-old/premier-series/)|
+|SP61 (O3 sensor)|[A1320301-SP61-01 by Nissha](https://www.fisinc.co.jp/en/products/products_search.html?Cat=Cat2)|ADC Pi or LCSS adapter|[Nissha-Fis](https://www.fisinc.co.jp/en/)|
+|SP61 (O3 sensor)|A1320301-SP61-02 by Nissha|ADC Pi|Nissha-Fis|
+|SPS-AQ2-01 (VOC sensor)|EVM-SP-02-SP3S by Nissha|ADC Pi|Nissha-Fis|
 
 # Last Updates
 
