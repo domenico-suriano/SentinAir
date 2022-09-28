@@ -29,7 +29,7 @@ Here below are listed the sensors having a I2C, TTL serial port, or USB hardware
 | Sensor | Sensor driver | Connection interface | Supplier or manufacturer |
 |     :---:    |            :---:            |                      :---:                   |                         :---:                        |
 |BME280 (atmospheric pressure, temperature, and relative humidity)|[bme280.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/bme280.py)|I2C|[Bosch Sensortec](https://www.bosch-sensortec.com)|
-|BH1750 (luxmeter)|[nox405.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/bh1750.py) |I2C|[ROHM semiconductor](https://www.rohm.com)|
+|BH1750 (luxmeter)|[bh1750.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/bh1750.py) |I2C|[ROHM semiconductor](https://www.rohm.com)|
 |PMS5003 (PM sensor)|[pms5003.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/pms5003.py) |TTL serial port|[Plantower](https://www.plantower.com/en/)|
 |PMS3003 (PM sensor)|[pms3003.py ](https://github.com/domenico-suriano/SentinAir/blob/master/devices/pms3003.py)|TTL serial port|Plantower|
 |MHZ19 (CO2 sensor)|[mhz19.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/mhz19.py) |TTL serial port|[Winsen](https://www.winsen-sensor.com)|
