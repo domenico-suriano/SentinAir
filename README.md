@@ -16,25 +16,25 @@ After following the "quick installation" procedure, plug into one of the system 
 Here below are summarized the instruments which drivers have been already developed and incorporated in the sentinAIr software, and therefore, readily usable with sentinAir.
 | Device | Device driver | Connection interface | Supplier or manufacturer |
 |     :---:    |            :---:            |                      :---:                   |                         :---:                        |
-|106L GO3 pro package (CO2and O3 monitor)|go3.py|USB|2B technologies|
-|405nm (NOx monitor)|nox405.py |USB|2B technologies|
-|CO12M (CO chemical analyzer)|co12m.py |Ethernet port|Environnement|
-|AF22M (SO2 chemical analyzer)|af22.py |Ethernet port|Environnement|
-|AC32M (NOx chemical analyzer)|ac32.py |Ethernet port|Environnement|
-|O342M (O3 chemical analyzer)|o342.py |Ethernet port|Environnement|
-|VOC72M (VOCchemical analyzer)|v72m.py |Ethernet port|Environnement|
+|106L GO3 pro package (CO2and O3 monitor)|[go3.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/go3.py)|USB|[2B technologies](https://www.twobtech.com)|
+|405nm (NOx monitor)|[nox405.py ](https://github.com/domenico-suriano/SentinAir/blob/master/devices/nox405.py)|USB|2B technologies|
+|CO12M (CO chemical analyzer)|[co12m.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/co12m.py) |Ethernet port|[Environnement](https://www.envea.global)|
+|AF22M (SO2 chemical analyzer)|[af22.py ](https://github.com/domenico-suriano/SentinAir/blob/master/devices/af22.py)|Ethernet port|Environnement|
+|AC32M (NOx chemical analyzer)|[ac32.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/ac32.py) |Ethernet port|Environnement|
+|O342M (O3 chemical analyzer)|[o342.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/o342.py) |Ethernet port|Environnement|
+|VOC72M (VOCchemical analyzer)|[v72m.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/v72m.py) |Ethernet port|Environnement|
 
 Here below are listed the sensors having a I2C, TTL serial port, or USB hardware interface, which drivers have been already developed and incorporated in the sentinAIr software, and therefore, readily usable with sentinAir. This list does not include the sensors featured by only an analog output interface.
 
 | Sensor | Sensor driver | Connection interface | Supplier or manufacturer |
 |     :---:    |            :---:            |                      :---:                   |                         :---:                        |
-|BME280 (atmospheric pressure, temperature, and relative humidity)|bme280.py|I2C|Bosch Sensortec|
-|BH1750 (luxmeter)|nox405.py |I2C|ROHM semiconductor|
-|PMS5003 (PM sensor)|pms5003.py |TTL serial port|Plantower|
-|PMS3003 (PM sensor)|pms3003.py |TTL serial port|Plantower|
-|MHZ19 (CO2 sensor)|mhz19.py |TTL serial port|Winsen|
-|IRC-A1 (CO2 sensor)|irca1.py |USB|Alphasense|
-|SPS30 (PM sensor)|sps30.py |TTL serial port|Sensirion|
+|BME280 (atmospheric pressure, temperature, and relative humidity)|[bme280.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/bme280.py)|I2C|[Bosch Sensortec](https://www.bosch-sensortec.com)|
+|BH1750 (luxmeter)|[nox405.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/bh1750.py) |I2C|[ROHM semiconductor](https://www.rohm.com)|
+|PMS5003 (PM sensor)|[pms5003.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/pms5003.py) |TTL serial port|[Plantower](https://www.plantower.com/en/)|
+|PMS3003 (PM sensor)|[pms3003.py ](https://github.com/domenico-suriano/SentinAir/blob/master/devices/pms3003.py)|TTL serial port|Plantower|
+|MHZ19 (CO2 sensor)|[mhz19.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/mhz19.py) |TTL serial port|[Winsen](https://www.winsen-sensor.com)|
+|IRC-A1 (CO2 sensor)|[irca1.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/irca1.py) |USB|[Alphasense](https://www.alphasense.com/product_type/target-gas/)|
+|SPS30 (PM sensor)|[sps30.py](https://github.com/domenico-suriano/SentinAir/blob/master/devices/sps30.py) |TTL serial port|[Sensirion](https://sensirion.com)|
 
 In order to use the sensors featured by just the analog hardware interface, drivers for some Analog-to-DIgital Converter (ADC) boards have been already developed and incorporated in the SentinAIr software. Currently, they are the [ADC Pi board](https://www.abelectronics.co.uk/p/69/adc-pi-raspberry-pi-analogue-to-digital-converter) by [ABelectronics](https://www.abelectronics.co.uk/), the [Multisensor board](https://www.tecnosens.it/en/multisensor) by [Tecnosens](https://www.tecnosens.it/en), and the Lcss adapter which is an open source project you can find [here](https://github.com/domenico-suriano/Lcss-adapter-board) .
 
