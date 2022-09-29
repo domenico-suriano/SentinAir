@@ -63,7 +63,7 @@ In the list shown below, there are some examples of sensors featured by an analo
 |GS+4CL2 (Cl2 sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|DDScientific|
 |GS+4SO2 (SO2 sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|DDScientific|
 |TDS 0035(CH4 sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|[Dynament](https://www.dynament.com/data-old/premier-series/)|
-|TDS 0058(CH4 sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|[Dynament](https://www.dynament.com/data-old/premier-series/)|
+|TDS 0058(CO2 sensor)|AFE by TEcnosens|Multisensor board by Tecnosens|[Dynament](https://www.dynament.com/data-old/premier-series/)|
 |SP61 (O3 sensor)|[A1320301-SP61-01 by Nissha](https://www.fisinc.co.jp/en/products/products_search.html?Cat=Cat2)|ADC Pi or LCSS adapter|[Nissha-Fis](https://www.fisinc.co.jp/en/)|
 |SP61 (O3 sensor)|A1320301-SP61-02 by Nissha|ADC Pi|Nissha-Fis|
 |SPS-AQ2-01 (VOC sensor)|EVM-SP-02-SP3S by Nissha|ADC Pi|Nissha-Fis|
