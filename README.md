@@ -67,6 +67,11 @@ In the list shown below, there are some examples of sensors featured by an analo
 |SP61 (O3 sensor)|[A1320301-SP61-01 by Nissha](https://www.fisinc.co.jp/en/products/products_search.html?Cat=Cat2)|ADC Pi or LCSS adapter|[Nissha-Fis](https://www.fisinc.co.jp/en/)|
 |SP61 (O3 sensor)|A1320301-SP61-02 by Nissha|ADC Pi|Nissha-Fis|
 |SPS-AQ2-01 (VOC sensor)|EVM-SP-02-SP3S by Nissha|ADC Pi|Nissha-Fis|
+|SB-xx (SB series sensor for various gases)|[EVM-SB-01-xx by Nissha](https://www.fisinc.co.jp/en/products/products_search.html?Cat=Cat2)|ADC Pi|Nissha-Fis|
+|SP-xx (SP series sensor for various gases)|[EVM-SP-01-xx by Nissha](https://www.fisinc.co.jp/en/products/products_search.html?Cat=Cat2)|ADC Pi|Nissha-Fis|
+|TGS26xx (TGS26 series sensor for various gases)|[EM26 by Figaro](https://www.figarosensor.com/product/evaluation-board/)|ADC Pi|[Figaro](https://www.figarosensor.com)|
+|FECSxx (FECS series sensor for various gases)|[EM-FECS(B) by Figaro](https://www.figarosensor.com/product/evaluation-board/)|ADC Pi|Figaro|
+|ME2-CO (CO sensor)|[ZE07-CO by Winsen](https://www.winsen-sensor.com/sensors/co-sensor/ze07-co.html)|ADC Pi or LCSS adapter|[Winsen](https://www.winsen-sensor.com/)|
 
 # Last Updates
 
