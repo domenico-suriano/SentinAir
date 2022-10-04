@@ -23,8 +23,6 @@ DEVICE_SENSORS = "pm1[ug/m3];pm2.5[ug/m3];pm4[ug/m3];pm10[ug/m3]"
 
 SERIAL_NUMBER = "00080000"
 SERIAL_TIMEOUT = 3
-ERR_STR = "-100.0;-100.0;-100.0;-100.0"
-ERR_STR1 = "-10.0;-10.0;-10.0;-10.0"
 ERR_STR2 = "-20.0;-20.0;-20.0;-20.0"
 ERR_STR3 = "-30.0;-30.0;-30.0;-30.0"
 ERR_STR4 = "-40.0;-40.0;-40.0;-40.0"
@@ -96,11 +94,16 @@ class Sps30:
             serialn = list(read[5:13])
             sn = ''.join(chr(e) for e in serialn)
             if self.__CRCcheck(read) == 1:
-                if sn == SERIAL_NUMBER:
-                    return 1
-                else:
-                    return found
-            return 0
+                if sn != SERIAL_NUMBER:
+                    return 0
+            else:
+                return 0
+            self.port.flushInput()
+            r = self.port.write(b"\x7E\x00\x00\x02\x01\x03\xF9\x7E")
+            read = self.port.read(7)
+            if self.__CRCcheck(read) == 0:
+                return found
+            return 1
         except Exception as e:
             return found
 
@@ -108,10 +111,6 @@ class Sps30:
 
     def sample(self):
         try:
-            r = self.port.write(b"\x7E\x00\x00\x02\x01\x03\xF9\x7E")
-            read = self.port.read(7)
-            if self.__CRCcheck(read) == 0:
-                return ERR_STR1
             time.sleep(1.1)
             self.port.flushInput()
             r = self.port.write(b"\x7E\x00\x03\x00\xFC\x7E")
@@ -146,11 +145,7 @@ class Sps30:
             except struct.error:
                 return ERR_STR3
             time.sleep(0.1)
-            self.port.flushInput()
-            r = self.port.write(b"\x7E\x00\x01\x00\xFE\x7E")
-            read = self.port.read(7)
             meas = '{:.1f}'.format(meas2[0]) + ";" + '{:.1f}'.format(meas2[1]) + ";" + '{:.1f}'.format(meas2[2]) + ";" + '{:.1f}'.format(meas2[3])
         except Exception as e:
             return ERR_STR4
         return meas
-    
